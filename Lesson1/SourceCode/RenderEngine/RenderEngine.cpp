@@ -1,4 +1,5 @@
 #include <bx/math.h>
+#include <bx/timer.h>
 
 #include "RenderEngine.h"
 
@@ -34,6 +35,8 @@ CRenderEngine::CRenderEngine(HINSTANCE hInstance)
 	bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 
 	m_defaultCube = new Cube();
+
+	timeStart = bx::getHPCounter();
 }
 
 CRenderEngine::~CRenderEngine()
@@ -93,6 +96,12 @@ HWND CRenderEngine::InitMainWindow(HINSTANCE hInstance)
 
 void CRenderEngine::Update()
 {
+	float totalTime = (float)((bx::getHPCounter() - timeStart) / double(bx::getHPFrequency()));
+
+	float translateX = 5.f * sinf(.5f * totalTime);
+	const float rotateSpeedY = -0.5f;
+	const float rotateSpeedX = 0.125f;
+
 	const bx::Vec3 at = { 0.0f, 0.0f,  0.0f };
 	const bx::Vec3 eye = { 0.0f, 10.0f, -5.0f };
 	float view[16];
@@ -103,6 +112,17 @@ void CRenderEngine::Update()
 
 	bgfx::setVertexBuffer(0, m_defaultCube->GetVertexBuffer());
 	bgfx::setIndexBuffer(m_defaultCube->GetIndexBuffer());
+
+	float mtxForRotate[16];
+	bx::mtxRotateXY(mtxForRotate, rotateSpeedX * totalTime, rotateSpeedY * totalTime);
+
+	float mtxForTranslate[16];
+	bx::mtxTranslate(mtxForTranslate, translateX, 0.f, 0.f);
+
+	float mtxForTransform[16];
+	bx::mtxMul(mtxForTransform, mtxForRotate, mtxForTranslate);
+	bgfx::setTransform(mtxForTransform);
+
 
 	bgfx::submit(0, m_defaultCube->GetProgramHandle());
 
