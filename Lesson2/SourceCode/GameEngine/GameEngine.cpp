@@ -1,6 +1,6 @@
 // GameEngine.cpp : Defines the entry point for the application.
 //
-#include <iostream>
+
 #if defined(DEBUG) || defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -42,8 +42,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     INIReader reader("Config/actionmap.ini");
     if (reader.ParseError() < 0) {
-        std::cout << "Can't load 'actionmap.ini'\n";
-        std::cout << "Path to config: 'Config/actionmap.ini'\n";
+        //std::cout << "Can't load 'actionmap.ini'\n";
+        //std::cout << "Path to config: 'Config/actionmap.ini'\n";
         return 1;
     }
 
