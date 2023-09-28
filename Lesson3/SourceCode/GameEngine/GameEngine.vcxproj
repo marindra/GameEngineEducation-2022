@@ -177,6 +177,9 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="JumpingCubeGameObject.h" />
+    <ClInclude Include="ControlledCubeGameObject.h" />
+    <ClInclude Include="MovingCubeGameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CubeGameObject.cpp" />
@@ -184,6 +187,9 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="JumpingCubeGameObject.cpp" />
+    <ClCompile Include="ControlledCubeGameObject.cpp" />
+    <ClCompile Include="MovingCubeGameObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

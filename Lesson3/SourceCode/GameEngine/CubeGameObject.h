@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-class CubeGameObject final : public GameObject
+class CubeGameObject /*final*/ : public GameObject
 {
 public:
 	CubeGameObject();

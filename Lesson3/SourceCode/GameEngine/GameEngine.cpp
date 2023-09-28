@@ -6,10 +6,15 @@
 #include <crtdbg.h>
 #endif
 
+#include <vector>
+
 #include "GameEngine.h"
 #include "RenderEngine.h"
 #include "RenderThread.h"
 #include "CubeGameObject.h"
+#include "ControlledCubeGameObject.h"
+#include "MovingCubeGameObject.h"
+#include "JumpingCubeGameObject.h"
 #include "GameTimer.h"
 #include "InputHandler.h"
 
@@ -30,15 +35,55 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     RenderThread* renderThread = renderEngine->GetRT();
     InputHandler* inputHandler = new InputHandler();
 
-    GameObject* cube = new CubeGameObject();
-    renderThread->EnqueueCommand(RC_CreateCubeRenderObject, cube->GetRenderProxy());
+    std::vector<JumpingCubeGameObject*> jumpCubes;
+    std::vector<MovingCubeGameObject*> movingCubes;
+    std::vector<ControlledCubeGameObject*> controlledCubes;
+
+    srand(time(NULL));
+
+    // create random type for each of 100 cubes
+    for (float xCoord = -5.f; xCoord < 5.1f; xCoord += 1.f) {
+        for (float zCoord = -3.5f; zCoord < 6.6f; zCoord += 1.f) {
+            int type = rand() % 3;
+            switch (type) {
+            case 0:
+            {
+                JumpingCubeGameObject* jumpCube = new JumpingCubeGameObject();
+                jumpCube->SetStartPosition(xCoord, 0.0f, zCoord);
+                jumpCubes.push_back(jumpCube);  // (std::move(jumpCube));
+                break;
+            }
+            case 1:
+            {
+                MovingCubeGameObject* movCube = new MovingCubeGameObject();
+                movCube->SetStartPosition(xCoord, 0.0f, zCoord);
+                movingCubes.push_back(movCube);  // (std::move(movingCube))
+                break;
+            }
+            case 2:
+            {
+                ControlledCubeGameObject* contrCube = new ControlledCubeGameObject();
+                contrCube->SetPosition(xCoord, 0.0f, zCoord);
+                controlledCubes.push_back(contrCube);  // (std::move(contrCube));
+            }
+            }
+        }
+    }
+
+    for (int i = 0; i < jumpCubes.size(); ++i) {
+        renderThread->EnqueueCommand(RC_CreateCubeRenderObject, jumpCubes[i]->GetRenderProxy());
+    }
+    for (int i = 0; i < movingCubes.size(); ++i) {
+        renderThread->EnqueueCommand(RC_CreateCubeRenderObject, movingCubes[i]->GetRenderProxy());
+    }
+    for (int i = 0; i < controlledCubes.size(); ++i) {
+        renderThread->EnqueueCommand(RC_CreateCubeRenderObject, controlledCubes[i]->GetRenderProxy());
+    }
 
     MSG msg = { 0 };
 
     timer.Start();
     timer.Reset();
-
-    float newPositionX = 0.0f;
 
     // Main message loop:
     while (msg.message != (WM_QUIT | WM_CLOSE))
@@ -52,17 +97,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             inputHandler->Update();
 
-            float t = 0;
             timer.Tick();
-            t = sin(timer.TotalTime())*2;
-
-            float velocity = 0.0f;
+              
+            int xMovingDirection = 0;
             if (inputHandler->GetInputState().test(eIC_GoLeft))
-                velocity -= 1.0f;
+                xMovingDirection -= 1;
             if (inputHandler->GetInputState().test(eIC_GoRight))
-                velocity += 1.0f;
-            newPositionX += velocity * timer.DeltaTime();
-            cube->SetPosition(newPositionX, 0.0f, 0.0f);
+                xMovingDirection += 1;
+
+            //cube->SetPosition(0.f, 0.f, 6.5f);
+            //cube->Move(xMovingDirection, timer.DeltaTime());
+            for (int i = 0; i < jumpCubes.size(); ++i) {
+                jumpCubes[i]->Move(timer.DeltaTime());
+            }
+            for (int i = 0; i < movingCubes.size(); ++i) {
+                movingCubes[i]->Move(timer.TotalTime());
+            }
+            for (int i = 0; i < controlledCubes.size(); ++i) {
+                controlledCubes[i]->Move(xMovingDirection, timer.DeltaTime());
+            }
+
 
             renderThread->OnEndFrame();
         }
