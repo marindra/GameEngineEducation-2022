@@ -3,6 +3,7 @@
 #include "ecsMesh.h"
 #include "ecsControl.h"
 #include "ecsPhys.h"
+#include "ecsShootSystem.h"
 
 EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandler)
 {
@@ -13,6 +14,7 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
 
     register_ecs_mesh_systems(ecs);
     register_ecs_control_systems(ecs);
+    register_ecs_shooting_systems(ecs);
     register_ecs_phys_systems(ecs);
 
 /*    auto cubeControl = ecs.entity()
@@ -36,7 +38,9 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
         .add<CubeMesh>();*/
     
     auto cubeCreator = ecs.entity()
-        .set(Position{ 0.f, 0.f, 0.f })
+        .set(Position{ 0.f, 1.f, 0.f })
+        .set(Recharge{ 6, 1.f })
+        .set(ShotsCounter{ 6 })
         .add<CubeCreator>();
 }
 

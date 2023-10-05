@@ -1,4 +1,5 @@
 #include "ecsPhys.h"
+#include "ecsShootSystem.h"
 #include <stdlib.h>
 
 static float rand_flt(float from, float to)
@@ -24,8 +25,12 @@ void register_ecs_phys_systems(flecs::world &ecs)
 
 
   ecs.system<Velocity, Position, const BouncePlane, const Bounciness>()
-    .each([&](Velocity &vel, Position &pos, const BouncePlane &plane, const Bounciness &bounciness)
+    .each([&](flecs::entity e, Velocity &vel, Position &pos, const BouncePlane &plane, const Bounciness &bounciness)
     {
+      if (e.has<Shoot>()) {
+        return;
+      }
+
       float dotPos = plane.x * pos.x + plane.y * pos.y + plane.z * pos.z;
       float dotVel = plane.x * vel.x + plane.y * vel.y + plane.z * vel.z;
       if (dotPos < plane.w)
@@ -65,6 +70,12 @@ void register_ecs_phys_systems(flecs::world &ecs)
       pos.x += rand_flt(-shiver.val, shiver.val);
       pos.y += rand_flt(-shiver.val, shiver.val);
       pos.z += rand_flt(-shiver.val, shiver.val);
+    });
+
+  ecs.system<TinyTimer>()
+    .each([&](flecs::entity e, TinyTimer& value)
+    {
+      value.leastTime -= e.delta_time();
     });
 }
 

@@ -36,6 +36,11 @@ struct FrictionAmount
   float val;
 };
 
+struct TinyTimer
+{
+	float leastTime;
+};
+
 typedef float Speed;
 
 void register_ecs_phys_systems(flecs::world &ecs);

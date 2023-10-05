@@ -33,22 +33,5 @@ void register_ecs_control_systems(flecs::world &ecs)
             vel.y = jump.val;
       });
     });
-
-  ecs.system<const CubeCreator, const Position>()
-      .each([&](flecs::entity e, const CubeCreator&, const Position& pos)
-      {
-        inputQuery.each([&](InputHandlerPtr input)
-        {
-                if (input.ptr->GetInputState().test(eIC_GoLeft)) {
-                    auto cube1 = e.world().entity()
-                        .set(Position{ pos.x, pos.y, pos.z })
-                        .set(Velocity{ 0.f, 0.f, 5.f })
-                        .set(Gravity{ 0.f, -9.8065f, 0.f })
-                        .set(Bounciness{ .3f })
-                        .set(BouncePlane{ 0.f, 1.f, 0.f, -2.f})
-                        .add<CubeMesh>();
-                }/**/
-        });
-      });
 }
 
