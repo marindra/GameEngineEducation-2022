@@ -7,6 +7,7 @@ struct ShotsCounter { int shotCount = 0; };
 struct Shoot { float livingTimeAfterBounce; };
 
 struct Target {};
+struct TargetWithAdding { int addShotCount = 1; };
 
 struct RemoveOnEnd {}; // remove timer at the end
 struct DestroyOnEnd {}; // destroy object when time runs out

@@ -28,8 +28,10 @@ void register_ecs_shooting_systems(flecs::world& ecs)
                 .set(Shoot{ 5.f })
                 .add<DestroyOnEnd>()
                 .add<CubeMesh>();
+
             e.set(TinyTimer{ creator.coolDownTime })
                 .add<RemoveOnEnd>();
+
             if (counter && recharger) {
               --counter->shotCount;
               if (counter->shotCount <= 0) {
@@ -102,6 +104,21 @@ void register_ecs_shooting_systems(flecs::world& ecs)
       .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
         targets.each([&](const Target&, const Position& targetPos) {
             if (abs(shootPos.x - targetPos.x) <= 1.f && abs(shootPos.y - targetPos.y) <= 1.f && abs(shootPos.z - targetPos.z) <= 1.f) {
+                e.add<DestroyIt>();
+            }
+            });
+      });
+
+    static auto targetsWithAdd = ecs.query<const TargetWithAdding, const Position>();
+    static auto myCubeCreator = ecs.query<const CubeCreator, ShotsCounter>();
+    ecs.system<const Shoot, const Position>()
+      .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
+        targetsWithAdd.each([&](const TargetWithAdding& val, const Position& targetPos) {
+            if (abs(shootPos.x - targetPos.x) <= 1.f && abs(shootPos.y - targetPos.y) <= 1.f && abs(shootPos.z - targetPos.z) <= 1.f) {
+                //need to add.. maybe like this? I need to think...
+                myCubeCreator.each([&](const CubeCreator&, ShotsCounter cnt) {
+                    cnt.shotCount += val.addShotCount;
+                    });
                 e.add<DestroyIt>();
             }
             });
