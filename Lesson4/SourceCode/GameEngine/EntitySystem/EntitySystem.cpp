@@ -41,7 +41,12 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
         .set(Position{ 0.f, 1.f, 0.f })
         .set(Recharge{ 6, 1.f })
         .set(ShotsCounter{ 6 })
-        .add<CubeCreator>();
+        .set(CubeCreator { 0.01f });
+
+    auto target = ecs.entity()
+        .set(Position{ 0.f, 0.f, 5.f })
+        .add<CubeMesh>()
+        .add<Target>();
 }
 
 void EntitySystem::Update()

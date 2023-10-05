@@ -9,7 +9,7 @@ void register_ecs_shooting_systems(flecs::world& ecs)
 {
     static auto inputQuery = ecs.query<InputHandlerPtr>();
     ecs.system<const CubeCreator, Position, ShotsCounter*, Recharge const*>()
-      .each([&](flecs::entity e, const CubeCreator&, Position& pos, ShotsCounter* counter, Recharge const* recharger)
+      .each([&](flecs::entity e, const CubeCreator& creator, Position& pos, ShotsCounter* counter, Recharge const* recharger)
       {
         if (e.has<TinyTimer>()) {
           return;
@@ -28,6 +28,8 @@ void register_ecs_shooting_systems(flecs::world& ecs)
                 .set(Shoot{ 5.f })
                 .add<DestroyOnEnd>()
                 .add<CubeMesh>();
+            e.set(TinyTimer{ creator.coolDownTime })
+                .add<RemoveOnEnd>();
             if (counter && recharger) {
               --counter->shotCount;
               if (counter->shotCount <= 0) {
@@ -43,7 +45,7 @@ void register_ecs_shooting_systems(flecs::world& ecs)
     ecs.system<TinyTimer, const RemoveOnEnd>()
       .each([&](flecs::entity e, TinyTimer& value, const RemoveOnEnd&)
       {
-        if (value.leastTime >= 0) {
+        if (value.leastTime > 0) {
           return;
         }
         e.remove<RemoveOnEnd>();
@@ -51,13 +53,21 @@ void register_ecs_shooting_systems(flecs::world& ecs)
 
       });
 
-    ecs.system<TinyTimer, const DestroyOnEnd, RenderProxyPtr* >()
-      .each([&](flecs::entity e, TinyTimer& value, const DestroyOnEnd&, RenderProxyPtr* meshPtr)
+    ecs.system<TinyTimer, const DestroyOnEnd>()
+      .each([&](flecs::entity e, TinyTimer& value, const DestroyOnEnd&)
       {
-        if (value.leastTime >= 0) {
+        if (value.leastTime > 0) {
           return;
         }
 
+        e.remove<TinyTimer>()
+          .remove<DestroyOnEnd>()
+          .add<DestroyIt>();
+      });
+
+    ecs.system<const DestroyIt, RenderProxyPtr* >()
+      .each([&](flecs::entity e, const DestroyIt&, RenderProxyPtr* meshPtr)
+      {
         //need to delete explicitly!
         if (meshPtr) {
             delete meshPtr->ptr;
@@ -84,10 +94,16 @@ void register_ecs_shooting_systems(flecs::world& ecs)
             if (!e.has<TinyTimer>()) {
                 e.set(TinyTimer{ val.livingTimeAfterBounce });
             }
-            else {
-                float dt = 0.f;
-                dt += dt * pos.x;
-            }
         }
+      });
+
+    static auto targets = ecs.query<const Target, const Position>();
+    ecs.system<const Shoot, const Position>()
+      .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
+        targets.each([&](const Target&, const Position& targetPos) {
+            if (abs(shootPos.x - targetPos.x) <= 1.f && abs(shootPos.y - targetPos.y) <= 1.f && abs(shootPos.z - targetPos.z) <= 1.f) {
+                e.add<DestroyIt>();
+            }
+            });
       });
 }
