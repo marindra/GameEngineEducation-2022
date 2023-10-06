@@ -39,14 +39,15 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
     
     auto cubeCreator = ecs.entity()
         .set(Position{ 0.f, 1.f, 0.f })
-        .set(Recharge{ 6, 1.f })
+        .set(Recharge{ 6, 2.f })
         .set(ShotsCounter{ 6 })
-        .set(CubeCreator { 0.01f });
+        .set(CubeCreator { 0.1f });
 
     auto target = ecs.entity()
         .set(Position{ 0.f, 0.f, 5.f })
         .add<CubeMesh>()
         .add<Target>();
+        //.set(TargetWithAdding{ 2 });
 }
 
 void EntitySystem::Update()
