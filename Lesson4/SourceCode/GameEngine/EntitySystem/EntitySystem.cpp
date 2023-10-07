@@ -39,7 +39,7 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
     
     auto cubeCreator = ecs.entity()
         .set(Position{ 0.f, 1.f, 0.f })
-        .set(Recharge{ 6, 2.f })
+        .set(Recharge{ 6, 1.f })
         .set(ShotsCounter{ 6 })
         .set(CubeCreator{ 0.1f })
         .set(Velocity{ 0.f, 0.f, 0.f })
@@ -47,15 +47,16 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
         .add<CubeMesh>()
         .add<Controllable>();
 
-   /* auto target = ecs.entity()
-        .set(Position{ 0.f, 0.f, 5.f })
+    auto target = ecs.entity()
+        .set(Position{ 4.f, 0.f, 5.f })
         .add<CubeMesh>()
-        .add<Target>(); // simple target  
+        .add<Target>(); // simple target
 
-        auto target2 = ecs.entity()
-        .set(Position{ 0.f, 0.f, 5.f })
+    auto target2 = ecs.entity()
+        .set(Position{ -4.f, 0.f, 5.f })
         .add<CubeMesh>()
         .set(TargetWithAdding{ 2 }); // target that can add value */
+    // If reloading has begun, the charges will be added to the next clip.
 }
 
 void EntitySystem::Update()

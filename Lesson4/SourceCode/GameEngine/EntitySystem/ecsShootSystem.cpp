@@ -36,8 +36,8 @@ void register_ecs_shooting_systems(flecs::world& ecs)
               --counter->shotCount;
               if (counter->shotCount <= 0) {
                 counter->shotCount = recharger->shotCount;
-                e.set<TinyTimer>({ recharger->time });
-                e.add<RemoveOnEnd>();
+                e.set<TinyTimer>({ recharger->time })
+                  .add<RemoveOnEnd>();
               }
             }
           }
@@ -99,27 +99,28 @@ void register_ecs_shooting_systems(flecs::world& ecs)
         }
       });
 
-    static auto targets = ecs.query<const Target, const Position>();
-    ecs.system<const Shoot, const Position>()
-      .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
-        targets.each([&](const Target&, const Position& targetPos) {
+    static auto shoots = ecs.query<const Shoot, const Position>();
+    ecs.system<const Target, const Position>()
+        .each([&](flecs::entity e, const Target&, const Position& targetPos) {
+        shoots.each([&](const Shoot&, const Position& shootPos) {
             if (abs(shootPos.x - targetPos.x) <= 2.f && abs(shootPos.y - targetPos.y) <= 2.f && abs(shootPos.z - targetPos.z) <= 2.f) {
                 e.add<DestroyIt>();
             }
             });
-      });
+        });
 
-    static auto targetsWithAdd = ecs.query<const TargetWithAdding, const Position>();
-    static auto myCubeCreator = ecs.query<const CubeCreator, ShotsCounter>();
-    ecs.system<const Shoot, const Position>()
-      .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
-        targetsWithAdd.each([&](const TargetWithAdding& val, const Position& targetPos) {
+    static auto myCubeCreator = ecs.query<const CubeCreator, ShotsCounter, TinyTimer*>();
+    ecs.system<const TargetWithAdding, const Position>()
+      .each([&](flecs::entity e, const TargetWithAdding& targetVal, const Position& targetPos) {
+        shoots.each([&](const Shoot&, const Position& shootPos) {
             if (abs(shootPos.x - targetPos.x) <= 2.f && abs(shootPos.y - targetPos.y) <= 2.f && abs(shootPos.z - targetPos.z) <= 2.f) {
-                //need to add.. maybe like this? I need to think...
-                myCubeCreator.each([&](const CubeCreator&, ShotsCounter & cnt) {
-                    cnt.shotCount += val.addShotCount;
-                    });
                 e.add<DestroyIt>();
+                if (e.has<DestroyIt>()) {
+                    return;
+                }
+                myCubeCreator.each([&](flecs::entity creator, const CubeCreator&, ShotsCounter & cnt, TinyTimer* tmr) {
+                    cnt.shotCount += targetVal.addShotCount;
+                  });
             }
             });
       });
