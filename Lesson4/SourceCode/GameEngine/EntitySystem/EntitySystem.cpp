@@ -41,17 +41,21 @@ EntitySystem::EntitySystem(RenderEngine* renderEngine, InputHandler* inputHandle
         .set(Position{ 0.f, 1.f, 0.f })
         .set(Recharge{ 6, 2.f })
         .set(ShotsCounter{ 6 })
-        .set(CubeCreator { 0.1f });
+        .set(CubeCreator{ 0.1f })
+        .set(Velocity{ 0.f, 0.f, 0.f })
+        .set(Speed{ 2.f })
+        .add<CubeMesh>()
+        .add<Controllable>();
 
-/*    auto target = ecs.entity()
+   /* auto target = ecs.entity()
         .set(Position{ 0.f, 0.f, 5.f })
         .add<CubeMesh>()
-        .add<Target>(); // simple target  */
+        .add<Target>(); // simple target  
 
-    auto target2 = ecs.entity()
+        auto target2 = ecs.entity()
         .set(Position{ 0.f, 0.f, 5.f })
         .add<CubeMesh>()
-        .set(TargetWithAdding{ 2 }); // target that can add value
+        .set(TargetWithAdding{ 2 }); // target that can add value */
 }
 
 void EntitySystem::Update()

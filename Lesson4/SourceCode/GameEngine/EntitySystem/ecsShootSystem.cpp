@@ -103,7 +103,7 @@ void register_ecs_shooting_systems(flecs::world& ecs)
     ecs.system<const Shoot, const Position>()
       .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
         targets.each([&](const Target&, const Position& targetPos) {
-            if (abs(shootPos.x - targetPos.x) <= 1.f && abs(shootPos.y - targetPos.y) <= 1.f && abs(shootPos.z - targetPos.z) <= 1.f) {
+            if (abs(shootPos.x - targetPos.x) <= 2.f && abs(shootPos.y - targetPos.y) <= 2.f && abs(shootPos.z - targetPos.z) <= 2.f) {
                 e.add<DestroyIt>();
             }
             });
@@ -114,7 +114,7 @@ void register_ecs_shooting_systems(flecs::world& ecs)
     ecs.system<const Shoot, const Position>()
       .each([&](flecs::entity e, const Shoot&, const Position& shootPos) {
         targetsWithAdd.each([&](const TargetWithAdding& val, const Position& targetPos) {
-            if (abs(shootPos.x - targetPos.x) <= 1.f && abs(shootPos.y - targetPos.y) <= 1.f && abs(shootPos.z - targetPos.z) <= 1.f) {
+            if (abs(shootPos.x - targetPos.x) <= 2.f && abs(shootPos.y - targetPos.y) <= 2.f && abs(shootPos.z - targetPos.z) <= 2.f) {
                 //need to add.. maybe like this? I need to think...
                 myCubeCreator.each([&](const CubeCreator&, ShotsCounter & cnt) {
                     cnt.shotCount += val.addShotCount;
