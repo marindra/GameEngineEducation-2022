@@ -12,12 +12,14 @@ void register_ecs_control_systems(flecs::world &ecs)
     {
       inputQuery.each([&](InputHandlerPtr input)
       {
-        float deltaVel = 0.f;
-        if (input.ptr->GetInputState().test(eIC_GoLeft))
-          deltaVel -= spd;
-        if (input.ptr->GetInputState().test(eIC_GoRight))
-          deltaVel += spd;
-        vel.x += deltaVel * e.delta_time();
+//        float deltaVel = 0.f;
+//        if (input.ptr->GetInputState().test(eIC_GoLeft))
+//          deltaVel -= spd;
+//        if (input.ptr->GetInputState().test(eIC_GoRight))
+//          deltaVel += spd;
+//        vel.x += deltaVel * e.delta_time();
+
+        // need to add Script Here!
       });
     });
 

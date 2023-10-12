@@ -84,3 +84,7 @@ void InputHandler::LoadConfiguration()
 		m_commandSymbolMap[strCommand] = strSymbol;
 	}
 }
+
+bool InputHandler::Test(size_t key) {
+	return m_InputState.test(key);
+}

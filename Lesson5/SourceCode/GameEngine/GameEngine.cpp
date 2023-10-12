@@ -12,7 +12,7 @@
 #include "GameTimer.h"
 #include "InputHandler.h"
 #include "EntitySystem/EntitySystem.h"
-#include "../ScriptSystem/ScriptSystem.h"
+#include "../ScriptSystem/ScriptProxy.h"
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -30,7 +30,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     RenderEngine* renderEngine = new RenderEngine(hInstance);
     RenderThread* renderThread = renderEngine->GetRT();
     InputHandler* inputHandler = new InputHandler();
-    CScriptSystem* scriptSystem = new CScriptSystem();
+    CScriptProxy* scriptProxy = new CScriptProxy();
+    // Maybe it will be better to work with all folder...
+    scriptProxy->Init("../../../Assets/scripts/movable.lua");
 
     EntitySystem* entitySystem = new EntitySystem(renderEngine, inputHandler);
 
@@ -50,7 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             inputHandler->Update();
-            scriptSystem->Update();
+//            scriptProxy->Update();
             entitySystem->Update();
 
             timer.Tick();
