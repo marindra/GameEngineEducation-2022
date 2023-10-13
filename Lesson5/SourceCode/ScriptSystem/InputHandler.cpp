@@ -26,7 +26,7 @@ InputHandler::InputHandler()
 
 bool InputHandler::IsKeyDown(size_t vk_key)
 {
-	if (GetAsyncKeyState(vk_key) & 0x8000)
+	if (GetAsyncKeyState((int)vk_key) & 0x8000)
 		return true;
 
 	return false;

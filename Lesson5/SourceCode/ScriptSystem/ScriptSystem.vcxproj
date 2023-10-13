@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>ScriptSystem</TargetName>
-    <IncludePath>$(SolutionDir)..\..\SDKs\lua\src;$(SolutionDir)..\..\SDKs\sol2\sol2\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\..\SDKs\lua\src;$(SolutionDir)..\..\SDKs\sol2\sol2\include;$(SolutionDir)..\..\SDKs\inih\include;$(IncludePath)</IncludePath>
     <IntDir>Bin\$(Configuration)$(Platform)\</IntDir>
     <OutDir>$(SolutionDir)..\Bin\$(Configuration)$(Platform)\</OutDir>
   </PropertyGroup>
@@ -146,13 +146,13 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\SDKs\inih\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\SDKs\inih\include;$(SolutionDir)..\..\SDKs\lua\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\SDKs\lua\lib\$(Platform)\$(Configuration)\;$(SolutionDir)..\..\SDKs\inih\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\SDKs\inih\lib\$(Platform)\$(Configuration)\;$(SolutionDir)..\..\SDKs\lua\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);lua.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -184,12 +184,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="IScriptProxy.h" />
-    <ClInclude Include="IScriptSystem.h" />
     <ClInclude Include="ScriptProxy.h" />
-    <ClInclude Include="ScriptSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="ScriptProxy.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
   </ItemGroup>

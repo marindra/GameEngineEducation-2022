@@ -42,4 +42,3 @@ private:
 
 	std::bitset<eIC_Max> m_InputState;
 };
-

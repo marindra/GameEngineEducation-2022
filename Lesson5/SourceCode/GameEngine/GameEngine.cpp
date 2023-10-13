@@ -12,7 +12,7 @@
 #include "GameTimer.h"
 #include "InputHandler.h"
 #include "EntitySystem/EntitySystem.h"
-#include "../ScriptSystem/ScriptProxy.h"
+#include "ScriptProxy.h"
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -32,9 +32,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     InputHandler* inputHandler = new InputHandler();
     CScriptProxy* scriptProxy = new CScriptProxy();
     // Maybe it will be better to work with all folder...
-    scriptProxy->Init("../../../Assets/scripts/movable.lua");
+    scriptProxy->Init("../../../Assets/scripts/movable.lua", inputHandler);
 
-    EntitySystem* entitySystem = new EntitySystem(renderEngine, inputHandler);
+    EntitySystem* entitySystem = new EntitySystem(renderEngine, inputHandler, scriptProxy);
 
     MSG msg = { 0 };
 

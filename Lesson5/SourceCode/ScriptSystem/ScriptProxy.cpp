@@ -1,5 +1,5 @@
 #include "ScriptProxy.h"
-#include "../GameEngine/InputHandler.h"
+#include "InputHandler.h"
 #include <fstream>
 
 /*class Foo {
@@ -16,19 +16,18 @@ public:
 	}
 };*/
 
-void CScriptProxy::Init(const char* filename) {
+void CScriptProxy::Init(const char* filename, InputHandler* inpHndlrPtr) {
 	lua_script.open_libraries(sol::lib::base);
 
 	std::ifstream f(filename);
     std::string lua_code;
 
-    //if (!f) {
-    //    lua_script.open_libraries(sol::lib::base, sol::lib::package);
-        //lua_script.script("print('File wasnt found.')");
-    //}
-
 	//InputHandler* inputHandler = new InputHandler(); <- I don't like this way! I want to share existed one!
 	//lua_script.new_usertype<InputHandler>("InputHandler", "inputHandler", inputHandler, "TestInput", &(InputHandler::Test));
+
+	lua_script["inputHandler"] = inpHndlrPtr;
+	lua_script["Test"] = &InputHandler::Test;
+
 	lua_script.script_file(filename);
 
 /*	Foo foo;
@@ -45,6 +44,7 @@ void CScriptProxy::Init(const char* filename) {
 	lua_script.script("assert(Test(foo,20))");*/
 }
 
-void CScriptProxy::Update() {
-	//lua_script["Update"]();
+float CScriptProxy::UpdateControllable(float deltaTime, float speed, float velocity) {
+	float result = lua_script["Update"](deltaTime, speed, velocity);
+	return result;
 }
