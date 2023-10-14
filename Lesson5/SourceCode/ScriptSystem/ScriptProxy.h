@@ -13,5 +13,6 @@ public:
 	void Init(const char* fileName, InputHandler* inpHndlrPtr=nullptr);
 private:
 	sol::state lua_script;
+	InputHandler* inputHandlerPtr = nullptr;
 };
 

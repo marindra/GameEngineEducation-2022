@@ -17,6 +17,7 @@ public:
 };*/
 
 void CScriptProxy::Init(const char* filename, InputHandler* inpHndlrPtr) {
+	this->inputHandlerPtr = inpHndlrPtr;
 	lua_script.open_libraries(sol::lib::base);
 
 	std::ifstream f(filename);
@@ -45,6 +46,17 @@ void CScriptProxy::Init(const char* filename, InputHandler* inpHndlrPtr) {
 }
 
 float CScriptProxy::UpdateControllable(float deltaTime, float speed, float velocity) {
-	float result = lua_script["Update"](deltaTime, speed, velocity);
-	return result;
+	lua_script["input"] = *this->inputHandlerPtr;
+	lua_script["TestInput"] = &InputHandler::Test;
+	sol::protected_function updater = lua_script["UpdateMove"];
+
+	auto velX = updater(deltaTime, speed, velocity);
+	if (velX.valid()) {
+		return (float)velX;
+	}
+	else {
+		sol::error err = velX;
+		assert(err.what());
+		return 0.1f;
+	}
 }

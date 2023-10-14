@@ -181,6 +181,7 @@
     <ClInclude Include="GameTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ScriptSystem\InputHandler.cpp" />
     <ClCompile Include="EntitySystem\ecsControl.cpp" />
     <ClCompile Include="EntitySystem\ecsMesh.cpp" />
     <ClCompile Include="EntitySystem\ecsPhys.cpp" />
