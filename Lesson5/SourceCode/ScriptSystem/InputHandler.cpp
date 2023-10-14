@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cassert>
 
+/*BE CAREFUL!! SHARED BETWEEN ScriptSystem AND GameEngine!!!*/
+
 InputHandler::InputHandler()
 {
 	m_strMapFilePath = "../../../Assets/Configs/actionmap.ini";

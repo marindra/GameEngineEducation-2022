@@ -31,6 +31,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     RenderThread* renderThread = renderEngine->GetRT();
     InputHandler* inputHandler = new InputHandler();
     CScriptProxy* scriptProxy = new CScriptProxy();
+
     // Maybe it will be better to work with all folder...
     scriptProxy->Init("../../../Assets/scripts/movable.lua", inputHandler);
 
@@ -52,7 +53,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             inputHandler->Update();
-//            scriptProxy->Update();
             entitySystem->Update();
 
             timer.Tick();

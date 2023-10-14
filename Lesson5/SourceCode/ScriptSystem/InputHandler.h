@@ -6,7 +6,7 @@
 
 #include "Input.h"
 #include "INIReader.h"
-
+/*BE CAREFUL!! InputHandler.cpp SHARED BETWEEN ScriptSystem AND GameEngine!!!*/
 class InputHandler
 {
 public:

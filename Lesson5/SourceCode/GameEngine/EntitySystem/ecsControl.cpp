@@ -14,7 +14,6 @@ void register_ecs_control_systems(flecs::world &ecs)
       scriptsQuery.each([&](CScriptProxyPtr scriptProxy_ptr)
       {
               vel.x = scriptProxy_ptr.ptr->UpdateControllable(e.delta_time(), spd, vel.x);
-        // need to add Script Here!
       });
     });
 
