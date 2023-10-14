@@ -23,11 +23,7 @@ void CScriptProxy::Init(const char* filename, InputHandler* inpHndlrPtr) {
 	std::ifstream f(filename);
     std::string lua_code;
 
-	//InputHandler* inputHandler = new InputHandler(); <- I don't like this way! I want to share existed one!
-	//lua_script.new_usertype<InputHandler>("InputHandler", "inputHandler", inputHandler, "TestInput", &(InputHandler::Test));
-
-	lua_script["inputHandler"] = inpHndlrPtr;
-	lua_script["Test"] = &InputHandler::Test;
+	lua_script.new_usertype<InputHandler>("InputHandler", "TestInput", &InputHandler::Test);
 
 	lua_script.script_file(filename);
 
@@ -46,9 +42,8 @@ void CScriptProxy::Init(const char* filename, InputHandler* inpHndlrPtr) {
 }
 
 float CScriptProxy::UpdateControllable(float deltaTime, float speed, float velocity) {
-	lua_script["input"] = *this->inputHandlerPtr;
-	lua_script["TestInput"] = &InputHandler::Test;
-	sol::protected_function updater = lua_script["UpdateMove"];
+	lua_script["input"] = this->inputHandlerPtr;
+	sol::protected_function updater = lua_script["UpdateMoveXForControllable"];
 
 	auto velX = updater(deltaTime, speed, velocity);
 	if (velX.valid()) {
