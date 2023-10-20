@@ -1,0 +1,21 @@
+<GameObject>
+  <CubeMesh/>
+  <PositionX>0.0</PositionX>
+  <PositionY>5.0</PositionY>
+  <PositionZ>0.0</PositionZ>
+  <Controllable/>
+  <Speed>10.0</Speed>
+  <VelocityX>0.0</VelocityX>
+  <VelocityY>0.0</VelocityY>
+  <VelocityZ>0.0</VelocityZ>
+  <FrictionAmount>0.9f</FrictionAmount>
+  <BouncePlaneX>0.0</BouncePlaneX>
+  <BouncePlaneY>1.0</BouncePlaneY>
+  <BouncePlaneZ>0.0</BouncePlaneZ>
+  <BouncePlaneW>0.0</BouncePlaneW>
+  <Bounciness>0.3</Bounciness>
+  <GravityX>0.0</GravityX>
+  <GravityY>-9.8065</GravityY>
+  <GravityZ>0.0</GravityZ>
+  <JumpSpeed>10.0</JumpSpeed>
+</GameObject>

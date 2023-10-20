@@ -14,5 +14,7 @@ public:
 	void Update();
 private:
 	flecs::world ecs;
+
+	void CreateEntityFromXML(const char* filename);
 };
 
